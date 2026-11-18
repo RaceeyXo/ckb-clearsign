@@ -1,0 +1,159 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+    {"id":"bg","type":"color","label":"Colour · background","default":"#0B0F14"},
+    {"id":"accent","type":"color","label":"Colour · CKB green accent","default":"#3CC68A"},
+    {"id":"danger","type":"color","label":"Colour · danger red","default":"#FF4D4F"},
+    {"id":"ink","type":"color","label":"Colour · text","default":"#FFFFFF"},
+    {"id":"muted","type":"color","label":"Colour · muted text","default":"#8A96A3"},
+    {"id":"line","type":"color","label":"Colour · lines and boxes","default":"#2A3542"},
+    {"id":"grid","type":"color","label":"Colour · background grid","default":"#131A22"},
+
+    {"id":"titleA","type":"string","label":"S1 · Title word 1","default":"CKB"},
+    {"id":"titleB","type":"string","label":"S1 · Title word 2 (accent)","default":"ClearSign"},
+    {"id":"subtitle","type":"string","label":"S1 · Subtitle","default":"Verify before you sign."},
+    {"id":"walletName","type":"string","label":"S1 · Wallet label","default":"Wallet"},
+    {"id":"rpcName","type":"string","label":"S1 · RPC label","default":"RPC node"},
+    {"id":"chainName","type":"string","label":"S1 · Chain label","default":"CKB chain"},
+    {"id":"askText","type":"string","label":"S1 · Wallet asks","default":"what&#39;s in input #0?"},
+    {"id":"lieText","type":"string","label":"S1 · RPC answers (the lie)","default":"61 CKB"},
+    {"id":"compromised","type":"string","label":"S1 · RPC stamp","default":"compromised"},
+    {"id":"realLabel","type":"string","label":"S1 · Real cell label","default":"input #0 · real cell"},
+    {"id":"realText","type":"string","label":"S1 · Real cell value","default":"10,061 CKB"},
+    {"id":"reviewTitle","type":"string","label":"S1 · Wallet screen title","default":"Confirm transaction"},
+    {"id":"outText","type":"string","label":"S1 · Output row","default":"60.9999 CKB"},
+    {"id":"feeText","type":"string","label":"S1 · Fee shown","default":"0.0001 CKB"},
+    {"id":"signText","type":"string","label":"S1 · Sign button","default":"Sign"},
+    {"id":"fineText","type":"string","label":"S1 · What the user thinks","default":"Looks fine."},
+    {"id":"goneText","type":"string","label":"S1 · Loss headline","default":"10,000 CKB gone"},
+    {"id":"goneSub","type":"string","label":"S1 · Loss detail","default":"Real fee: 10,000.0001 CKB, paid to miners"},
+    {"id":"rewindText","type":"string","label":"S1 · Rewind label","default":"Rewind"},
+    {"id":"clearsignName","type":"string","label":"S1 · ClearSign node label","default":"ClearSign"},
+    {"id":"fetchText","type":"string","label":"S1 · Fetch call","default":"getTransaction(0x6c83a29b…7a87)"},
+    {"id":"originTitle","type":"string","label":"S1 · Origin tx card title","default":"origin tx (as the RPC sent it)"},
+    {"id":"hashOutpoint","type":"string","label":"S1 · Out point tx_hash","default":"0x6c83a29b95ab3e18161f30e05b127900df9ca1b9e502e8df9f16d95e76e47a87"},
+    {"id":"hashRecomputed","type":"string","label":"S1 · Recomputed hash","default":"0xd575aa26f26e10fcfc169824c7181266a189d9e0c8570113878d9df97a32bc9d"},
+    {"id":"outpointLabel","type":"string","label":"S1 · Left hash label","default":"Out point · tx_hash"},
+    {"id":"recomputedLabel","type":"string","label":"S1 · Right hash label","default":"Recomputed · blake2b(origin tx)"},
+    {"id":"mismatchCode","type":"string","label":"S1 · Error code","default":"ORIGIN_TX_HASH_MISMATCH"},
+    {"id":"blockedText","type":"string","label":"S1 · Blocked line","default":"blocked before signing."},
+    {"id":"line1a","type":"string","label":"S1 · Closing line, before emphasis","default":"A CKB out point"},
+    {"id":"line1b","type":"string","label":"S1 · Closing line, emphasised word","default":"is"},
+    {"id":"line1c","type":"string","label":"S1 · Closing line, after emphasis","default":"the origin tx hash."},
+    {"id":"line2","type":"string","label":"S1 · Closing line 2","default":"Re-hashing makes lying impossible."},
+
+    {"id":"demoHeading","type":"string","label":"S2 · Heading","default":"The real run"},
+    {"id":"demoWindowTitle","type":"string","label":"S2 · Terminal title","default":"npm run demo"},
+    {"id":"demoPlaceholder","type":"string","label":"S2 · Placeholder text","default":"terminal recording goes here"},
+    {"id":"callout1","type":"string","label":"S2 · Callout 1","default":"Honest RPC → verified ✅"},
+    {"id":"callout2","type":"string","label":"S2 · Callout 2","default":"Lying RPC → caught 🛑"},
+    {"id":"callout3","type":"string","label":"S2 · Callout 3","default":"User never asked to sign"},
+
+    {"id":"flag1","type":"string","label":"S3 · Flag 1","default":"Input data verified ✅"},
+    {"id":"flag2","type":"string","label":"S3 · Flag 2","default":"Chain state verified ❌"},
+    {"id":"flag2note","type":"string","label":"S3 · Flag 2 note","default":"(next)"},
+    {"id":"shipsText","type":"string","label":"S3 · Ships line","default":"Ships as a CCC signer wrapper → runs inside the wallet."},
+    {"id":"boxSigner","type":"string","label":"S3 · Inner box","default":"CCC signer"},
+    {"id":"boxClearSign","type":"string","label":"S3 · Middle box","default":"ClearSign"},
+    {"id":"boxWallet","type":"string","label":"S3 · Outer box","default":"Wallet"},
+    {"id":"nextLabel","type":"string","label":"S3 · Next steps label","default":"Next"},
+    {"id":"next1","type":"string","label":"S3 · Next step 1","default":"npm release"},
+    {"id":"next2","type":"string","label":"S3 · Next step 2","default":"wallet pilot"},
+    {"id":"next3","type":"string","label":"S3 · Next step 3","default":"chain-state check"},
+    {"id":"endName","type":"string","label":"S3 · End card name","default":"CKB ClearSign"},
+    {"id":"endUrl","type":"string","label":"S3 · End card URL","default":"github.com/RaceeyXo/ckb-clearsign"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg, #0b0f14);
+      }
+      #ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0b0f14);
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Scene 2 length: change data-duration on #demo, then set the root's data-duration to
+      40 + that + 15. Or drop the clip at assets/demo.mp4 and run: node scripts/set-demo.mjs
+    -->
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="115"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="ground"></div>
+
+      <div
+        id="problem"
+        data-composition-id="problem"
+        data-composition-src="compositions/problem.html"
+        data-start="0"
+        data-duration="40"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <div
+        id="demo"
+        data-composition-id="demo"
+        data-composition-src="compositions/demo.html"
+        data-start="problem"
+        data-duration="60"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <div
+        id="outro"
+        data-composition-id="outro"
+        data-composition-src="compositions/outro.html"
+        data-start="demo"
+        data-duration="15"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Sound effects: one lane; each placed so its peak lands one frame after its picture -->
+      <audio id="sfx-click" class="clip" src="assets/sfx/click.mp3" data-duration="0.37" data-start="17.36" data-track-index="3" data-volume="0.5"></audio>
+      <audio id="sfx-impact" class="clip" src="assets/sfx/impact-bass-1.mp3" data-duration="2.12" data-start="17.96" data-track-index="3" data-volume="0.4"></audio>
+      <audio id="sfx-rewind" class="clip" src="assets/sfx/glitch-3.mp3" data-duration="3.1" data-start="21.6" data-track-index="4" data-volume="0.3"></audio>
+      <audio id="sfx-error" class="clip" src="assets/sfx/error.mp3" data-duration="1.62" data-start="30.69" data-track-index="3" data-volume="1"></audio>
+      <audio id="sfx-cut1" class="clip" src="assets/sfx/whoosh.mp3" data-duration="0.58" data-start="39.87" data-track-index="3" data-volume="0.3"></audio>
+      <audio id="sfx-pop1" class="clip" src="assets/sfx/pop.mp3" data-duration="0.72" data-start="45.92" data-track-index="3" data-volume="0.3"></audio>
+      <audio id="sfx-pop2" class="clip" src="assets/sfx/pop.mp3" data-duration="0.72" data-start="63.92" data-track-index="3" data-volume="0.3"></audio>
+      <audio id="sfx-pop3" class="clip" src="assets/sfx/pop.mp3" data-duration="0.72" data-start="81.92" data-track-index="3" data-volume="0.3"></audio>
+      <audio id="sfx-cut2" class="clip" src="assets/sfx/whoosh-short.mp3" data-duration="0.58" data-start="99.87" data-track-index="3" data-volume="0.3"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

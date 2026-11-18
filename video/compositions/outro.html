@@ -1,0 +1,140 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Inter", sans-serif;
+      color: var(--ink, #fff);
+    }
+    #o-grid {
+      position: absolute;
+      inset: 0;
+      background-color: var(--bg, #0b0f14);
+      background-image:
+        linear-gradient(var(--grid, #131a22) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid, #131a22) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-position: -1px -1px;
+    }
+    #root .layer { position: absolute; inset: 0; }
+    #root .abs { position: absolute; white-space: nowrap; }
+    #root .mono { font-family: "JetBrains Mono", monospace; }
+
+    /* flags */
+    #root .flag { position: absolute; left: 160px; height: 140px; width: 1600px; border-top: 2px solid var(--line, #2a3542); }
+    #o-f1 { top: 330px; }
+    #o-f2 { top: 470px; border-bottom: 2px solid var(--line, #2a3542); }
+    #root .flag .bar { position: absolute; left: 0; top: 30px; width: 8px; height: 80px; border-radius: 4px; }
+    #o-f1 .bar { background: var(--accent, #3cc68a); }
+    #o-f2 .bar { background: var(--danger, #ff4d4f); }
+    #root .flag .t { position: absolute; left: 44px; top: 34px; font-size: 64px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+    #o-f2t, #o-f2note { display: inline-block; }
+    #o-f2note { font-weight: 400; color: var(--muted, #8a96a3); }
+
+    /* ships */
+    #o-ships { left: 160px; top: 190px; font-size: 56px; font-weight: 800; letter-spacing: -0.01em; }
+    #root .box { position: absolute; border-radius: 20px; border: 3px solid #5b6878; }
+    #root .box .lab { position: absolute; left: 28px; top: 20px; font-size: 36px; font-weight: 800; white-space: nowrap; }
+    #o-bw { left: 160px; top: 330px; width: 1100px; height: 470px; background: #0f151c; }
+    #o-bc { left: 220px; top: 420px; width: 980px; height: 320px; border-color: var(--accent, #3cc68a); }
+    #o-bc .lab { color: var(--accent, #3cc68a); }
+    #o-bs { left: 280px; top: 510px; width: 860px; height: 170px; background: #141b23; }
+    #o-bs .lab { font-family: "JetBrains Mono", monospace; font-weight: 700; }
+    #o-bs .sub { position: absolute; left: 28px; top: 90px; font-size: 30px; color: var(--muted, #8a96a3); white-space: nowrap; font-family: "JetBrains Mono", monospace; }
+    #o-bnote { left: 1330px; top: 520px; font-size: 36px; line-height: 1.4; white-space: normal; width: 460px; color: var(--muted, #8a96a3); }
+    #o-bnote b { color: var(--ink, #fff); }
+
+    /* next */
+    #o-nextlab { left: 160px; top: 300px; font-size: 56px; font-weight: 800; }
+    #o-path { left: 200px; top: 556px; width: 1520px; height: 4px; background: #5b6878; transform-origin: 0 50%; }
+    #root .stop { position: absolute; top: 534px; width: 48px; height: 48px; border-radius: 50%; border: 4px solid var(--accent, #3cc68a); background: var(--bg, #0b0f14); }
+    #root .stoplab { position: absolute; top: 620px; font-size: 44px; font-weight: 700; white-space: nowrap; }
+    #o-s1 { left: 176px; } #o-l1 { left: 160px; }
+    #o-s2 { left: 916px; } #o-l2 { left: 860px; }
+    #o-s3 { left: 1656px; } #o-l3 { left: 1400px; width: 420px; text-align: right; }
+
+    /* end */
+    #o-endname { left: 160px; top: 400px; font-size: 64px; font-weight: 900; letter-spacing: -0.02em; color: var(--accent, #3cc68a); }
+    #o-endurl { left: 160px; top: 500px; font-size: 72px; font-weight: 700; }
+    #o-endrule { left: 164px; top: 616px; width: 300px; height: 4px; background: var(--accent, #3cc68a); transform-origin: 0 50%; }
+  </style>
+
+  <div id="root" data-composition-id="outro" data-width="1920" data-height="1080">
+    <div id="o-grid"></div>
+
+    <div id="o-flags" class="clip layer" data-start="0" data-duration="5" data-track-index="0">
+      <div id="o-flags-in" class="layer">
+        <div id="o-f1" class="flag"><div class="bar"></div><div class="t" data-var-text="flag1">Input data verified ✅</div></div>
+        <div id="o-f2" class="flag"><div class="bar"></div><div class="t"><span id="o-f2t" data-var-text="flag2">Chain state verified ❌</span>&nbsp;&nbsp;<span id="o-f2note" data-var-text="flag2note">(next)</span></div></div>
+      </div>
+    </div>
+
+    <div id="o-ship" class="clip layer" data-start="5" data-duration="3.6" data-track-index="0">
+      <div id="o-ship-in" class="layer">
+        <div id="o-ships" class="abs" data-var-text="shipsText">Ships as a CCC signer wrapper → runs inside the wallet.</div>
+        <div id="o-bw" class="box"><div class="lab" data-var-text="boxWallet">Wallet</div></div>
+        <div id="o-bc" class="box"><div class="lab" data-var-text="boxClearSign">ClearSign</div></div>
+        <div id="o-bs" class="box"><div class="lab" data-var-text="boxSigner">CCC signer</div><div class="sub">signOnlyTransaction(tx)</div></div>
+        <div id="o-bnote" class="abs">verify, explain, <b>then</b> sign</div>
+      </div>
+    </div>
+
+    <div id="o-next" class="clip layer" data-start="8.6" data-duration="3" data-track-index="0">
+      <div id="o-next-in" class="layer">
+        <div id="o-nextlab" class="abs" data-var-text="nextLabel">Next</div>
+        <div id="o-path" class="abs"></div>
+        <div id="o-s1" class="stop"></div><div id="o-l1" class="stoplab" data-var-text="next1">npm release</div>
+        <div id="o-s2" class="stop"></div><div id="o-l2" class="stoplab" data-var-text="next2">wallet pilot</div>
+        <div id="o-s3" class="stop"></div><div id="o-l3" class="stoplab" data-var-text="next3">chain-state check</div>
+      </div>
+    </div>
+
+    <div id="o-end" class="clip layer" data-start="11.6" data-duration="3.4" data-track-index="0">
+      <div id="o-endname" class="abs" data-var-text="endName">CKB ClearSign</div>
+      <div id="o-endurl" class="abs mono" data-var-text="endUrl">github.com/RaceeyXo/ckb-clearsign</div>
+      <div id="o-endrule" class="abs"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = "expo.out", OUT = "power3.in";
+      const blurOut = (sel, at, d = 0.28) =>
+        tl.fromTo(sel, { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(8px)", duration: d, ease: OUT, immediateRender: false }, at);
+
+      // flags: one at a time, the red one held as honestly as the green one
+      tl.fromTo("#o-f1 .bar", { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: IN }, 0);
+      tl.fromTo("#o-f1 .t", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 0.05);
+      tl.fromTo("#o-f2 .bar", { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: IN }, 1.6);
+      tl.fromTo("#o-f2t", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 1.7);
+      tl.fromTo("#o-f2note", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: IN }, 2.5);
+      blurOut("#o-flags-in", 4.7, 0.28);
+
+      // ships: the diagram grows outward from the signer
+      tl.fromTo("#o-ships", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 5.05);
+      tl.fromTo("#o-bs", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.5, ease: IN }, 5.3);
+      tl.fromTo("#o-bc", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.5, ease: IN }, 5.8);
+      tl.fromTo("#o-bw", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.5, ease: IN }, 6.3);
+      tl.fromTo("#o-bnote", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: IN }, 6.8);
+      blurOut("#o-ship-in", 8.3, 0.28);
+
+      // next: the road draws through three stops
+      tl.fromTo("#o-nextlab", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 8.65);
+      tl.fromTo("#o-path", { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: "power1.inOut" }, 8.8);
+      [["#o-s1", "#o-l1", 8.85], ["#o-s2", "#o-l2", 9.5], ["#o-s3", "#o-l3", 10.15]].forEach(([s, l, at]) => {
+        tl.fromTo(s, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: IN }, at);
+        tl.fromTo(l, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: IN }, at + 0.05);
+      });
+      blurOut("#o-next-in", 11.35, 0.25);
+
+      // end card: lands by 12.0, then holds dead still for 3 s
+      tl.fromTo("#o-endname", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 11.6);
+      tl.fromTo("#o-endurl", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 11.7);
+      tl.fromTo("#o-endrule", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: IN }, 11.65);
+
+      window.__timelines["outro"] = tl;
+    })();
+  </script>
+</template>
