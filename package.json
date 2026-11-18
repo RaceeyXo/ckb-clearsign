@@ -1,0 +1,50 @@
+{
+  "name": "ckb-clearsign",
+  "version": "0.1.0",
+  "description": "Verify-before-sign for CKB: re-hash every input's origin transaction and explain the transaction from verified data only.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "test": "npm run typecheck && vitest run",
+    "test:live": "CLEARSIGN_LIVE=1 vitest run test/live.test.ts",
+    "demo": "tsx demo/fake-rpc.ts",
+    "fixtures": "tsx scripts/fixtures.ts"
+  },
+  "keywords": [
+    "ckb",
+    "nervos",
+    "ccc",
+    "signer",
+    "clear-signing",
+    "wallet",
+    "security"
+  ],
+  "dependencies": {
+    "@ckb-ccc/core": "^1.23.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.1"
+  }
+}
