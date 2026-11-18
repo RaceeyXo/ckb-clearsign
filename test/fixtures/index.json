@@ -1,0 +1,35 @@
+{
+  "network": "testnet",
+  "fixtures": [
+    {
+      "hash": "0xf4420a0aee1d9a8e7c0c1e63a0b9f053a29b5840208a0e1d31bc96586d136a76",
+      "file": "0xf4420a0aee1d9a8e7c0c1e63a0b9f053a29b5840208a0e1d31bc96586d136a76.json",
+      "hasXudt": false,
+      "origins": 1
+    },
+    {
+      "hash": "0x46a9eb9cdae9022fcc7f6f49f2544be2d2a41c04bd2e03aafe7ee95480c53d16",
+      "file": "0x46a9eb9cdae9022fcc7f6f49f2544be2d2a41c04bd2e03aafe7ee95480c53d16.json",
+      "hasXudt": false,
+      "origins": 1
+    },
+    {
+      "hash": "0x0007da4bc3b90349bb57bd9c7de427b67e4697bf1990961a0de51af746e79a40",
+      "file": "0x0007da4bc3b90349bb57bd9c7de427b67e4697bf1990961a0de51af746e79a40.json",
+      "hasXudt": false,
+      "origins": 1
+    },
+    {
+      "hash": "0x0af1403063b56401e830e4ed42b44c2d0b127b6fdab153d32a3c01025475a4b7",
+      "file": "0x0af1403063b56401e830e4ed42b44c2d0b127b6fdab153d32a3c01025475a4b7.json",
+      "hasXudt": true,
+      "origins": 2
+    },
+    {
+      "hash": "0x6c83a29b95ab3e18161f30e05b127900df9ca1b9e502e8df9f16d95e76e47a87",
+      "file": "0x6c83a29b95ab3e18161f30e05b127900df9ca1b9e502e8df9f16d95e76e47a87.json",
+      "hasXudt": true,
+      "origins": 2
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "network": "testnet",
+  "hash": "0x0007da4bc3b90349bb57bd9c7de427b67e4697bf1990961a0de51af746e79a40",
+  "hasXudt": false,
+  "recordedAt": "2026-11-18T12:53:02.933Z",
+  "tx": {
+    "version": "0x0",
+    "cellDeps": [
+      {
+        "outPoint": {
+          "txHash": "0xf8de3bb47d055cdf460d93a2a6e1b05f7432f9777c8c474abf4eec1d4aee5d37",
+          "index": "0x0"
+        },
+        "depType": "depGroup"
+      }
+    ],
+    "headerDeps": [],
+    "inputs": [
+      {
+        "previousOutput": {
+          "txHash": "0xcb0391c3a03b28977c169c5a1d9f38ab57b1e14340fc858cb81660c317ee1b3c",
+          "index": "0x1"
+        },
+        "since": "0x0"
+      }
+    ],
+    "outputs": [
+      {
+        "capacity": "0x9184e72a000",
+        "lock": {
+          "codeHash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+          "hashType": "type",
+          "args": "0x227b3d2ebed15b94d1c11b28fbd03e50c874a1a2"
+        }
+      },
+      {
+        "capacity": "0x11adca89220e2",
+        "lock": {
+          "codeHash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+          "hashType": "type",
+          "args": "0x3f1573b44218d4c12a91919a58a863be415a2bc3"
+        }
+      }
+    ],
+    "outputsData": [
+      "0x",
+      "0x"
+    ],
+    "witnesses": [
+      "0x5500000010000000550000005500000041000000d8f6f18d234b991105df0617d497eab885e343750298e5334f724ff46dcd10454e9b3c78247d238b4a48daa26801f4e7b0434475f599bea40834f5453fbc683901"
+    ]
+  },
+  "origins": {
+    "0xcb0391c3a03b28977c169c5a1d9f38ab57b1e14340fc858cb81660c317ee1b3c": {
+      "version": "0x0",
+      "cellDeps": [
+        {
+          "outPoint": {
+            "txHash": "0xf8de3bb47d055cdf460d93a2a6e1b05f7432f9777c8c474abf4eec1d4aee5d37",
+            "index": "0x0"
+          },
+          "depType": "depGroup"
+        }
+      ],
+      "headerDeps": [],
+      "inputs": [
+        {
+          "previousOutput": {
+            "txHash": "0x1c230bb70f1285f06e400f9ddc24c8fa66a5d43d0a7f30393f3abb3611022e6d",
+            "index": "0x1"
+          },
+          "since": "0x0"
+        }
+      ],
+      "outputs": [
+        {
+          "capacity": "0x9184e72a000",
+          "lock": {
+            "codeHash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+            "hashType": "type",
+            "args": "0x3474d7cf55ac65c8d241f9b6293dafaaf03d96f9"
+          }
+        },
+        {
+          "capacity": "0x123f4f704c2b2",
+          "lock": {
+            "codeHash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+            "hashType": "type",
+            "args": "0x3f1573b44218d4c12a91919a58a863be415a2bc3"
+          }
+        }
+      ],
+      "outputsData": [
+        "0x",
+        "0x"
+      ],
+      "witnesses": [
+        "0x5500000010000000550000005500000041000000caa9588b24ededb2bfe865b0f4ca1bf73b22d45ba3d62e8693bc5a2a76c64bb5388deade39ca97c092c3b43d9fd14d549844a22360d4409d95627ca6a4eb401d01"
+      ]
+    }
+  }
+}
