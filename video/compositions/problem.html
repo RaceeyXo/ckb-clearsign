@@ -1,0 +1,473 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Inter", sans-serif;
+      color: var(--ink, #fff);
+    }
+    #root .abs { position: absolute; }
+    #root .mono { font-family: "JetBrains Mono", monospace; }
+    #p-grid {
+      position: absolute;
+      inset: 0;
+      background-color: var(--bg, #0b0f14);
+      background-image:
+        linear-gradient(var(--grid, #131a22) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid, #131a22) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-position: -1px -1px;
+    }
+    #root .group { position: absolute; inset: 0; }
+    #root .layer { position: absolute; inset: 0; }
+
+    /* ---------- title ---------- */
+    #t-title {
+      left: 160px; top: 330px;
+      font-size: 168px; font-weight: 900; letter-spacing: -0.02em; line-height: 1;
+      white-space: nowrap;
+    }
+    #t-title span { display: inline-block; }
+    #t-b { color: var(--accent, #3cc68a); }
+    #t-sub { left: 164px; top: 540px; font-size: 56px; font-weight: 400; color: var(--muted, #8a96a3); }
+    #t-hash { left: 164px; top: 660px; font-size: 30px; color: var(--muted, #8a96a3); white-space: nowrap; }
+
+    /* ---------- attack ---------- */
+    #atk-cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+    #atk-phone {
+      left: 200px; top: 200px; width: 380px; height: 680px;
+      border: 3px solid #5b6878; border-radius: 48px; background: #0f151c;
+    }
+    #atk-phone .notch { position: absolute; left: 140px; top: 16px; width: 100px; height: 10px; border-radius: 5px; background: #2a3542; }
+    #atk-phone .hdr { position: absolute; left: 30px; top: 52px; font-size: 28px; white-space: nowrap; }
+    #ph-hdr1 { color: var(--muted, #8a96a3); font-weight: 700; }
+    #ph-hdr2 { font-weight: 700; }
+    #atk-phone .row { position: absolute; left: 30px; width: 316px; height: 96px; border-top: 2px solid var(--line, #2a3542); }
+    #atk-phone .row .k { position: absolute; left: 0; top: 12px; font-size: 28px; color: var(--muted, #8a96a3); white-space: nowrap; }
+    #atk-phone .row .v { position: absolute; left: 0; top: 48px; font-size: 32px; font-weight: 700; white-space: nowrap; }
+    #ph-row-in { top: 112px; }
+    #ph-row-out { top: 212px; }
+    #ph-row-fee { top: 312px; }
+    #ph-in-real { color: var(--danger, #ff4d4f); }
+    #ph-in-strike, #ph-fee-strike { position: absolute; left: 0; top: 68px; height: 4px; background: var(--danger, #ff4d4f); transform-origin: 0 50%; }
+    #ph-in-strike { width: 118px; }
+    #ph-fee-strike { width: 176px; }
+    #ph-fee-hl { position: absolute; left: -12px; top: 4px; width: 340px; height: 88px; border: 2px solid var(--ink, #fff); border-radius: 12px; }
+    #ph-sign {
+      position: absolute; left: 30px; top: 560px; width: 316px; height: 84px; border-radius: 16px;
+      background: var(--accent, #3cc68a); color: #0b0f14; font-size: 34px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #ph-tap { position: absolute; left: 168px; top: 582px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.85); }
+
+    #atk-wire1 { left: 580px; top: 539px; width: 420px; height: 3px; background: #5b6878; transform-origin: 0 50%; }
+    #atk-ask {
+      left: 610px; top: 440px; font-size: 30px; padding: 10px 18px; white-space: nowrap;
+      border: 2px solid #5b6878; border-radius: 12px; background: #0f151c;
+    }
+    #atk-lie {
+      left: 700px; top: 566px; font-size: 32px; font-weight: 700; padding: 10px 18px; white-space: nowrap;
+      border: 2px solid var(--danger, #ff4d4f); color: var(--danger, #ff4d4f); border-radius: 12px; background: #0f151c;
+    }
+    #atk-rpc {
+      left: 1000px; top: 390px; width: 300px; height: 300px;
+      border: 3px solid #5b6878; border-radius: 16px; background: #0f151c;
+    }
+    #atk-rpc .bay { position: absolute; left: 28px; width: 244px; height: 56px; border: 2px solid var(--line, #2a3542); border-radius: 8px; }
+    #atk-rpc .led { position: absolute; right: 16px; top: 20px; width: 12px; height: 12px; border-radius: 50%; background: #5b6878; }
+    #atk-rpc .slot { position: absolute; left: 16px; top: 24px; width: 120px; height: 6px; border-radius: 3px; background: var(--line, #2a3542); }
+    #atk-rpc-red { position: absolute; inset: -3px; border: 3px solid var(--danger, #ff4d4f); border-radius: 16px; }
+    #atk-rpc-name { left: 1000px; top: 708px; width: 300px; text-align: center; font-size: 32px; font-weight: 700; }
+    #atk-stamp {
+      left: 1000px; top: 330px; width: 300px; text-align: center; font-size: 32px; font-weight: 700;
+      color: var(--danger, #ff4d4f); letter-spacing: 0.04em;
+    }
+    #atk-wire2 { left: 1300px; top: 539px; width: 140px; height: 0; border-top: 3px dashed #5b6878; transform-origin: 0 50%; }
+    #atk-chain-name { left: 1440px; top: 210px; font-size: 32px; font-weight: 700; white-space: nowrap; }
+    #atk-chain { left: 1440px; top: 270px; width: 360px; height: 96px; }
+    #atk-chain .blk { position: absolute; top: 0; width: 96px; height: 96px; border: 3px solid #5b6878; border-radius: 10px; background: #0f151c; }
+    #atk-chain .blk i { position: absolute; left: 14px; right: 14px; height: 6px; border-radius: 3px; background: var(--line, #2a3542); }
+    #atk-chain .lnk { position: absolute; top: 46px; width: 36px; height: 3px; background: #5b6878; }
+    #atk-drop { left: 1619px; top: 366px; width: 3px; height: 104px; background: var(--ink, #fff); transform-origin: 50% 0; }
+    #atk-cell {
+      left: 1400px; top: 470px; width: 420px; height: 176px;
+      border: 3px solid var(--ink, #fff); border-radius: 16px; background: #0f151c;
+    }
+    #atk-cell .k { position: absolute; left: 26px; top: 22px; font-size: 28px; color: var(--muted, #8a96a3); white-space: nowrap; }
+    #atk-cell .v { position: absolute; left: 26px; top: 70px; font-size: 64px; font-weight: 900; letter-spacing: -0.02em; white-space: nowrap; }
+    #atk-wallet-name { left: 200px; top: 896px; width: 380px; text-align: center; font-size: 32px; font-weight: 700; }
+
+    #atk-flash { position: absolute; inset: 0; background: var(--danger, #ff4d4f); }
+    #atk-fine { left: 900px; top: 420px; font-size: 88px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+    #atk-gone { left: 900px; top: 400px; font-size: 104px; font-weight: 900; letter-spacing: -0.02em; color: var(--danger, #ff4d4f); white-space: nowrap; }
+    #atk-gone-sub { left: 906px; top: 540px; font-size: 38px; white-space: nowrap; }
+
+    /* ---------- rewind ---------- */
+    #rw-red { position: absolute; inset: 0; background: var(--danger, #ff4d4f); }
+    #rw-bars .bar { position: absolute; left: 0; width: 1920px; height: 3px; background: rgba(255,255,255,0.14); }
+    #rw-label { left: 160px; top: 120px; font-size: 40px; color: var(--muted, #8a96a3); white-space: nowrap; }
+
+    /* ---------- fix ---------- */
+    #fix-flood { position: absolute; inset: 0; background: var(--danger, #ff4d4f); }
+    #root .node {
+      position: absolute; top: 110px; width: 300px; height: 170px;
+      border: 3px solid #5b6878; border-radius: 16px; background: #0f151c;
+    }
+    #root .node .n { position: absolute; left: 26px; top: 30px; font-size: 40px; font-weight: 800; white-space: nowrap; }
+    #root .node .s { position: absolute; left: 26px; top: 98px; font-size: 28px; white-space: nowrap; color: var(--muted, #8a96a3); }
+    #fx-wallet { left: 160px; }
+    #fx-wallet-red { position: absolute; inset: -3px; border: 3px solid var(--danger, #ff4d4f); border-radius: 16px; }
+    #fx-cs { left: 810px; border-color: var(--accent, #3cc68a); }
+    #fx-cs .n { color: var(--accent, #3cc68a); }
+    #fx-rpc { left: 1460px; border-color: var(--danger, #ff4d4f); }
+    #fx-rpc .s { color: var(--danger, #ff4d4f); }
+    #fx-wireL { left: 460px; top: 194px; width: 350px; height: 3px; background: #5b6878; transform-origin: 0 50%; }
+    #fx-wireL-red { left: 460px; top: 194px; width: 350px; height: 3px; background: var(--danger, #ff4d4f); transform-origin: 100% 50%; }
+    #fx-wireM { left: 810px; top: 194px; width: 300px; height: 3px; background: #5b6878; transform-origin: 0 50%; }
+    #fx-wireR { left: 1110px; top: 194px; width: 350px; height: 3px; background: #5b6878; transform-origin: 0 50%; }
+    #fx-packet { left: 1104px; top: 186px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent, #3cc68a); }
+    #fx-fetch { left: 1000px; top: 300px; font-size: 28px; color: var(--accent, #3cc68a); white-space: nowrap; }
+
+    #fx-origin {
+      left: 160px; top: 420px; width: 600px; height: 480px;
+      border: 3px solid #5b6878; border-radius: 16px; background: #0f151c;
+    }
+    #fx-origin .ttl { position: absolute; left: 28px; top: 24px; font-size: 28px; color: var(--muted, #8a96a3); white-space: nowrap; }
+    #fx-origin pre { position: absolute; left: 28px; top: 82px; font-size: 28px; line-height: 44px; white-space: pre; font-family: "JetBrains Mono", monospace; }
+    #fx-origin .lie { color: var(--danger, #ff4d4f); font-weight: 700; }
+    #fx-bytes .b { position: absolute; font-size: 28px; padding: 2px 6px; background: #0b0f14; color: var(--muted, #8a96a3); white-space: nowrap; }
+    #fx-b2b {
+      left: 920px; top: 540px; width: 340px; height: 220px;
+      border: 3px solid var(--accent, #3cc68a); border-radius: 16px; background: #0f151c;
+    }
+    #fx-b2b .n { position: absolute; left: 28px; top: 26px; font-size: 36px; font-weight: 700; white-space: nowrap; }
+    #fx-round { position: absolute; left: 28px; top: 90px; font-size: 28px; color: var(--muted, #8a96a3); white-space: nowrap; }
+    #fx-bar-bg { position: absolute; left: 28px; top: 156px; width: 280px; height: 10px; border-radius: 5px; background: var(--line, #2a3542); }
+    #fx-bar { position: absolute; left: 28px; top: 156px; width: 280px; height: 10px; border-radius: 5px; background: var(--accent, #3cc68a); transform-origin: 0 50%; }
+
+    #root .hashblk { position: absolute; width: 460px; }
+    #root .hashblk .k { font-size: 28px; color: var(--muted, #8a96a3); white-space: nowrap; margin-bottom: 14px; }
+    #root .hashblk .h {
+      font-family: "JetBrains Mono", monospace; font-size: 34px; line-height: 50px;
+      width: 22ch; word-break: break-all; font-weight: 700;
+    }
+    #fx-hr { left: 1300px; top: 520px; }
+    #fx-hr .h { color: var(--ink, #fff); }
+    #fx-ho { left: 220px; top: 440px; }
+    #fx-neq { left: 830px; top: 470px; width: 200px; text-align: center; font-size: 140px; font-weight: 900; color: var(--danger, #ff4d4f); line-height: 1; }
+    #fx-code { left: 220px; top: 740px; font-size: 64px; font-weight: 700; color: var(--danger, #ff4d4f); white-space: nowrap; }
+    #fx-blocked { left: 222px; top: 836px; font-size: 52px; font-weight: 700; white-space: nowrap; }
+
+    /* ---------- closing line ---------- */
+    #ln-1 { left: 160px; top: 330px; font-size: 80px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+    #ln-1 span { display: inline-block; }
+    #ln-1b { color: var(--accent, #3cc68a); }
+    #ln-struct { left: 164px; top: 470px; font-size: 34px; color: var(--muted, #8a96a3); white-space: nowrap; }
+    #ln-struct b { color: var(--ink, #fff); font-weight: 700; border-bottom: 3px solid var(--accent, #3cc68a); }
+    #ln-2 { left: 160px; top: 640px; font-size: 80px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+  </style>
+
+  <div id="root" data-composition-id="problem" data-width="1920" data-height="1080">
+    <div id="p-grid"></div>
+
+    <!-- 0-4 s: title -->
+    <div id="p-title" class="clip group" data-start="0" data-duration="4" data-track-index="0">
+      <div id="t-inner" class="layer">
+        <h1 id="t-title" class="abs"><span id="t-a" data-var-text="titleA">CKB</span> <span id="t-b" data-var-text="titleB">ClearSign</span></h1>
+        <div id="t-sub" class="abs" data-var-text="subtitle">Verify before you sign.</div>
+        <div id="t-hash" class="abs mono" data-var-text="hashOutpoint">0x6c83a29b95ab3e18161f30e05b127900df9ca1b9e502e8df9f16d95e76e47a87</div>
+      </div>
+    </div>
+
+    <!-- 4-22 s: the attack -->
+    <div id="p-attack" class="clip group" data-start="4" data-duration="18" data-track-index="0">
+      <div id="atk-out" class="layer">
+        <div id="atk-cam">
+          <div id="atk-phone" class="abs">
+            <div class="notch"></div>
+            <div id="ph-hdr1" class="hdr" data-var-text="walletName">Wallet</div>
+            <div id="ph-hdr2" class="hdr" data-var-text="reviewTitle">Confirm transaction</div>
+            <div id="ph-row-in" class="row">
+              <div class="k">Input #0</div>
+              <div id="ph-in-wait" class="v" style="color: var(--muted, #8a96a3)">…</div>
+              <div id="ph-in-lie" class="v" data-var-text="lieText">61 CKB</div>
+              <div id="ph-in-real" class="v" data-var-text="realText">10,061 CKB</div>
+              <div id="ph-in-strike"></div>
+            </div>
+            <div id="ph-row-out" class="row">
+              <div class="k">Output #0 → you</div>
+              <div class="v" data-var-text="outText">60.9999 CKB</div>
+            </div>
+            <div id="ph-row-fee" class="row">
+              <div id="ph-fee-hl"></div>
+              <div class="k">Fee</div>
+              <div id="ph-fee-v" class="v" data-var-text="feeText">0.0001 CKB</div>
+              <div id="ph-fee-strike"></div>
+            </div>
+            <div id="ph-sign" data-var-text="signText">Sign</div>
+            <div id="ph-tap"></div>
+          </div>
+          <div id="atk-wallet-name" class="abs" data-var-text="walletName">Wallet</div>
+
+          <div id="atk-wire1" class="abs"></div>
+          <div id="atk-ask" class="abs mono" data-var-text="askText">what's in input #0?</div>
+          <div id="atk-lie" class="abs mono" data-var-text="lieText">61 CKB</div>
+
+          <div id="atk-stamp" class="abs mono" data-var-text="compromised">compromised</div>
+          <div id="atk-rpc" class="abs">
+            <div class="bay" style="top: 40px"><div class="slot"></div><div class="led"></div></div>
+            <div class="bay" style="top: 120px"><div class="slot"></div><div class="led"></div></div>
+            <div class="bay" style="top: 200px"><div class="slot"></div><div class="led"></div></div>
+            <div id="atk-rpc-red"></div>
+          </div>
+          <div id="atk-rpc-name" class="abs" data-var-text="rpcName">RPC node</div>
+
+          <div id="atk-wire2" class="abs"></div>
+          <div id="atk-chain-name" class="abs" data-var-text="chainName">CKB chain</div>
+          <div id="atk-chain" class="abs">
+            <div class="blk" style="left: 0"><i style="top: 30px"></i><i style="top: 56px; right: 40px"></i></div>
+            <div class="lnk" style="left: 96px"></div>
+            <div class="blk" style="left: 132px"><i style="top: 30px"></i><i style="top: 56px; right: 30px"></i></div>
+            <div class="lnk" style="left: 228px"></div>
+            <div class="blk" style="left: 264px"><i style="top: 30px"></i><i style="top: 56px; right: 46px"></i></div>
+          </div>
+          <div id="atk-drop" class="abs"></div>
+          <div id="atk-cell" class="abs">
+            <div class="k mono" data-var-text="realLabel">input #0 · real cell</div>
+            <div class="v" data-var-text="realText">10,061 CKB</div>
+          </div>
+        </div>
+        <div id="atk-flash"></div>
+        <div id="atk-fine" class="abs" data-var-text="fineText">Looks fine.</div>
+        <div id="atk-gone" class="abs" data-var-text="goneText">10,000 CKB gone</div>
+        <div id="atk-gone-sub" class="abs" data-var-text="goneSub">Real fee: 10,000.0001 CKB, paid to miners</div>
+      </div>
+    </div>
+
+    <!-- 22-23.3 s: rewind -->
+    <div id="p-rewind" class="clip group" data-start="22" data-duration="1.3" data-track-index="1">
+      <div id="rw-red"></div>
+      <div id="rw-bars" class="layer">
+        <div class="bar" style="top: 140px"></div>
+        <div class="bar" style="top: 290px"></div>
+        <div class="bar" style="top: 410px"></div>
+        <div class="bar" style="top: 530px"></div>
+        <div class="bar" style="top: 660px"></div>
+        <div class="bar" style="top: 790px"></div>
+        <div class="bar" style="top: 930px"></div>
+      </div>
+      <div id="rw-label" class="abs mono">◀◀ <span data-var-text="rewindText">Rewind</span></div>
+    </div>
+
+    <!-- 23-34 s: ClearSign in the path -->
+    <div id="p-fix" class="clip group" data-start="23" data-duration="11" data-track-index="0">
+      <div id="fx-out" class="layer">
+        <div id="fix-flood"></div>
+        <div id="fx-wireL" class="abs"></div>
+        <div id="fx-wireL-red" class="abs"></div>
+        <div id="fx-wireM" class="abs"></div>
+        <div id="fx-wireR" class="abs"></div>
+        <div id="fx-wallet" class="node">
+          <div class="n" data-var-text="walletName">Wallet</div>
+          <div class="s mono">tx · input #0</div>
+          <div id="fx-wallet-red"></div>
+        </div>
+        <div id="fx-cs" class="node">
+          <div class="n" data-var-text="clearsignName">ClearSign</div>
+          <div class="s mono">verifyInputs()</div>
+        </div>
+        <div id="fx-rpc" class="node">
+          <div class="n" data-var-text="rpcName">RPC node</div>
+          <div class="s mono" data-var-text="compromised">compromised</div>
+        </div>
+        <div id="fx-packet" class="abs"></div>
+        <div id="fx-fetch" class="abs mono" data-var-text="fetchText">getTransaction(0x6c83a29b…7a87)</div>
+
+        <div id="fx-origin" class="abs">
+          <div class="ttl" data-var-text="originTitle">origin tx (as the RPC sent it)</div>
+<pre>version: 0x0
+cell_deps: [1]
+inputs: [2]
+outputs[0]:
+  capacity: <span class="lie" data-var-text="lieText">61 CKB</span>
+  lock: 0x9bd7…cce8
+outputs_data: [0x]</pre>
+        </div>
+        <div id="fx-bytes" class="layer">
+          <div class="b mono" style="left: 780px; top: 570px">0000…0a1b</div>
+          <div class="b mono" style="left: 780px; top: 620px">9bd7e06f…</div>
+          <div class="b mono" style="left: 780px; top: 670px">00e40b54…</div>
+          <div class="b mono" style="left: 780px; top: 720px">cce8…0000</div>
+        </div>
+        <div id="fx-b2b" class="abs">
+          <div class="n mono">blake2b-256</div>
+          <div id="fx-round" class="mono">round 0 / 12</div>
+          <div id="fx-bar-bg"></div>
+          <div id="fx-bar"></div>
+        </div>
+
+        <div id="fx-hr" class="hashblk">
+          <div class="k" data-var-text="recomputedLabel">Recomputed · blake2b(origin tx)</div>
+          <div id="fx-hr-h" class="h" data-var-text="hashRecomputed">0xd575aa26f26e10fcfc169824c7181266a189d9e0c8570113878d9df97a32bc9d</div>
+        </div>
+        <div id="fx-ho" class="hashblk">
+          <div class="k" data-var-text="outpointLabel">Out point · tx_hash</div>
+          <div id="fx-ho-h" class="h" data-var-text="hashOutpoint">0x6c83a29b95ab3e18161f30e05b127900df9ca1b9e502e8df9f16d95e76e47a87</div>
+        </div>
+        <div id="fx-neq" class="abs">≠</div>
+        <div id="fx-code" class="abs mono" data-var-text="mismatchCode">ORIGIN_TX_HASH_MISMATCH</div>
+        <div id="fx-blocked" class="abs" data-var-text="blockedText">blocked before signing.</div>
+      </div>
+    </div>
+
+    <!-- 34-40 s: the one idea -->
+    <div id="p-line" class="clip group" data-start="34" data-duration="6" data-track-index="0">
+      <div id="ln-out" class="layer">
+        <div id="ln-1" class="abs"><span id="ln-1a" data-var-text="line1a">A CKB out point</span> <span id="ln-1b" data-var-text="line1b">is</span> <span id="ln-1c" data-var-text="line1c">the origin tx hash.</span></div>
+        <div id="ln-struct" class="abs mono">out_point { <b>tx_hash</b>: 0x6c83a29b…7a87, index: 0 }</div>
+        <div id="ln-2" class="abs" data-var-text="line2">Re-hashing makes lying impossible.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const scope = document.querySelector('[data-composition-id="problem"]');
+      const cv = (name, fb) => (getComputedStyle(scope).getPropertyValue("--" + name).trim() || fb);
+      const IN = "expo.out", MOVE = "power2.inOut", OUT = "power3.in";
+      const blurIn = (sel, at, d = 0.5) =>
+        tl.fromTo(sel, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: d, ease: IN }, at);
+      const blurOut = (sel, at, d = 0.28) =>
+        tl.fromTo(sel, { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(8px)", duration: d, ease: OUT, immediateRender: false }, at);
+      const lift = (sel, at, dy = 24, d = 0.6) =>
+        tl.fromTo(sel, { opacity: 0, y: dy }, { opacity: 1, y: 0, duration: d, ease: IN }, at);
+      const draw = (sel, at, d = 0.5) =>
+        tl.fromTo(sel, { scaleX: 0 }, { scaleX: 1, duration: d, ease: "power1.inOut" }, at);
+
+      /* ---- title 0-4 ---- */
+      tl.fromTo(["#t-a", "#t-b"], { opacity: 0.25, filter: "blur(6px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: IN, stagger: 0.12 }, 0);
+      tl.fromTo("#t-sub", { opacity: 0, color: () => cv("line", "#2A3542") }, { opacity: 1, color: () => cv("ink", "#FFFFFF"), duration: 0.7, ease: IN }, 0.55);
+      tl.fromTo("#t-hash", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.3, ease: "none" }, 1.2);
+      blurOut("#t-inner", 3.65, 0.3);
+
+      /* ---- attack 4-22 (scene time) ---- */
+      lift("#atk-phone", 4.1, 30, 0.7);
+      blurIn("#atk-wallet-name", 4.3);
+      tl.set(["#ph-hdr2", "#ph-row-out", "#ph-row-fee", "#ph-sign", "#ph-tap", "#ph-in-lie", "#ph-in-real", "#ph-in-strike", "#ph-fee-strike", "#ph-fee-hl", "#atk-rpc-red", "#atk-stamp", "#atk-flash", "#atk-fine", "#atk-gone", "#atk-gone-sub"], { opacity: 0 }, 0);
+      tl.set(["#ph-in-strike", "#ph-fee-strike"], { scaleX: 0 }, 0);
+      tl.fromTo("#ph-row-in", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: IN }, 4.6);
+      draw("#atk-wire1", 4.7, 0.5);
+      lift("#atk-rpc", 5.0, 30, 0.7);
+      blurIn("#atk-rpc-name", 5.2);
+      // the question travels to the RPC
+      tl.fromTo("#atk-ask", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.6, ease: IN }, 5.8);
+      // the answer comes back
+      tl.fromTo("#atk-lie", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 0.7, ease: IN }, 7.0);
+      tl.to("#ph-in-wait", { opacity: 0, duration: 0.15 }, 7.5);
+      blurIn("#ph-in-lie", 7.55, 0.4);
+      // the RPC is compromised
+      tl.fromTo("#atk-rpc-red", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 8.9);
+      tl.to("#atk-rpc .led", { backgroundColor: () => cv("danger", "#FF4D4F"), duration: 0.3 }, 8.9);
+      tl.fromTo("#atk-stamp", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: IN }, 9.0);
+      // the real cell on chain
+      draw("#atk-wire2", 10.3, 0.4);
+      blurIn("#atk-chain-name", 10.5);
+      tl.fromTo("#atk-chain .blk, #atk-chain .lnk", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: IN, stagger: 0.06 }, 10.6);
+      tl.fromTo("#atk-drop", { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: "power2.out" }, 11.3);
+      lift("#atk-cell", 11.6, -20, 0.7);
+
+      // 14: push into the phone, everything else leaves
+      tl.to(["#atk-ask", "#atk-lie", "#atk-wire1", "#atk-wire2", "#atk-rpc", "#atk-rpc-name", "#atk-stamp", "#atk-chain-name", "#atk-chain", "#atk-drop", "#atk-cell", "#atk-wallet-name"],
+        { opacity: 0, filter: "blur(10px)", duration: 0.6, ease: "power2.in" }, 14.0);
+      tl.fromTo("#atk-cam", { scale: 1, x: 0, y: 0 }, { scale: 1.35, x: 40, y: -180, duration: 1.0, ease: MOVE }, 14.1);
+      tl.to("#ph-hdr1", { opacity: 0, duration: 0.2 }, 14.8);
+      blurIn("#ph-hdr2", 14.9, 0.4);
+      tl.fromTo(["#ph-row-out", "#ph-row-fee"], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: IN, stagger: 0.12 }, 15.1);
+      tl.fromTo("#ph-fee-hl", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 15.9);
+      tl.fromTo("#ph-sign", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: IN }, 16.0);
+      tl.fromTo("#atk-fine", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 16.2);
+      // tap
+      tl.fromTo("#ph-tap", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.25, ease: "power2.out" }, 17.15);
+      tl.to("#ph-sign", { filter: "brightness(0.8)", scale: 0.97, duration: 0.08 }, 17.4);
+      tl.to("#ph-sign", { scale: 1, filter: "brightness(1)", duration: 0.18, ease: "power2.out" }, 17.5);
+      tl.to("#ph-tap", { opacity: 0, duration: 0.2 }, 17.6);
+      // 18: the real effect
+      tl.fromTo("#atk-flash", { opacity: 0 }, { opacity: 0.55, duration: 0.06, ease: "none" }, 18.0);
+      tl.to("#atk-flash", { opacity: 0.14, duration: 0.6, ease: "power2.out" }, 18.06);
+      tl.to("#ph-fee-hl", { borderColor: () => cv("danger", "#FF4D4F"), duration: 0.2 }, 18.0);
+      tl.to("#ph-sign", { backgroundColor: () => cv("danger", "#FF4D4F"), duration: 0.2 }, 18.0);
+      tl.fromTo("#ph-in-strike", { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.25, ease: "power2.out" }, 18.15);
+      tl.to(["#ph-in-lie", "#ph-in-strike"], { opacity: 0, duration: 0.2 }, 18.6);
+      blurIn("#ph-in-real", 18.7, 0.4);
+      tl.fromTo("#ph-fee-strike", { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.25, ease: "power2.out" }, 18.9);
+      tl.to("#atk-fine", { opacity: 0, filter: "blur(8px)", duration: 0.12, ease: OUT }, 18.0);
+      tl.fromTo("#atk-gone", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.35, ease: IN }, 18.2);
+      blurIn("#atk-gone-sub", 18.9, 0.5);
+      // leave by rewinding: smear left
+      tl.to("#atk-out", { x: -160, filter: "blur(14px)", opacity: 0, duration: 0.32, ease: OUT }, 21.68);
+
+      /* ---- rewind 22-23.3 ---- */
+      tl.fromTo("#rw-red", { opacity: 0.14 }, { opacity: 0, duration: 0.7, ease: "power2.out" }, 22.0);
+      tl.fromTo("#rw-bars .bar", { x: 1920 }, { x: -1920, duration: 0.9, ease: "none", stagger: 0.04 }, 22.0);
+      tl.fromTo("#rw-label", { opacity: 0 }, { opacity: 1, duration: 0.12 }, 22.05);
+      tl.to("#rw-label", { opacity: 0, duration: 0.2 }, 23.0);
+
+      /* ---- fix 23-34 ---- */
+      tl.set(["#fx-wallet-red", "#fx-wireL-red", "#fix-flood", "#fx-neq", "#fx-code", "#fx-blocked", "#fx-packet"], { opacity: 0 }, 0);
+      lift("#fx-wallet", 23.2, 20, 0.6);
+      lift("#fx-rpc", 23.3, 20, 0.6);
+      draw("#fx-wireL", 23.4, 0.5);
+      draw("#fx-wireM", 23.5, 0.4);
+      draw("#fx-wireR", 23.6, 0.4);
+      // ClearSign drops into the wire
+      tl.to("#fx-wireM", { opacity: 0, duration: 0.2 }, 24.1);
+      tl.fromTo("#fx-cs", { opacity: 0, y: -60, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: IN }, 24.1);
+      // fetch the origin tx
+      tl.fromTo("#fx-packet", { opacity: 1, x: 0 }, { x: 340, duration: 0.6, ease: MOVE }, 25.0);
+      blurIn("#fx-fetch", 25.0, 0.4);
+      tl.to("#fx-packet", { x: 0, duration: 0.6, ease: MOVE, backgroundColor: () => cv("danger", "#FF4D4F") }, 25.7);
+      tl.to("#fx-packet", { opacity: 0, duration: 0.15 }, 26.3);
+      tl.fromTo("#fx-origin", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.7, ease: IN }, 26.2);
+      tl.to("#fx-fetch", { opacity: 0.45, duration: 0.4 }, 26.6);
+      // hash it locally
+      lift("#fx-b2b", 26.9, 20, 0.6);
+      tl.fromTo("#fx-bytes .b", { opacity: 0, x: 0 }, { keyframes: [{ opacity: 1, x: 30, duration: 0.2 }, { opacity: 0, x: 140, duration: 0.4, ease: "power2.in" }], stagger: 0.24 }, 27.2);
+      tl.fromTo("#fx-bar", { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: "none" }, 27.2);
+      const rounds = { r: 0 };
+      tl.fromTo(rounds, { r: 0 }, {
+        r: 12, duration: 1.4, ease: "none",
+        onUpdate: () => { document.querySelector("#fx-round").textContent = "round " + Math.round(rounds.r) + " / 12"; },
+      }, 27.2);
+      tl.fromTo("#fx-hr .k", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 28.5);
+      tl.fromTo("#fx-hr-h", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.8, ease: "none" }, 28.6);
+      // compare side by side
+      blurOut(["#fx-origin", "#fx-b2b"], 29.6, 0.3);
+      tl.to("#fx-fetch", { opacity: 0, duration: 0.3 }, 29.6);
+      tl.to("#fx-hr", { x: -220, y: -80, duration: 0.8, ease: MOVE }, 29.7);
+      tl.fromTo("#fx-ho .k", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 29.9);
+      tl.fromTo("#fx-ho-h", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "none" }, 30.0);
+      tl.fromTo("#fx-neq", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.4, ease: IN }, 30.9);
+      tl.to("#fx-hr-h", { color: () => cv("danger", "#FF4D4F"), duration: 0.3 }, 30.9);
+      // 31.4: the whole tx goes red
+      tl.to("#fix-flood", { opacity: 0.16, duration: 0.4, ease: MOVE }, 31.4);
+      tl.to("#fx-wallet-red", { opacity: 1, duration: 0.3 }, 31.4);
+      tl.to("#fx-wireL-red", { opacity: 1, duration: 0.3 }, 31.4);
+      tl.to("#fx-wallet .s", { color: () => cv("danger", "#FF4D4F"), duration: 0.3 }, 31.4);
+      tl.fromTo("#fx-code", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25, ease: IN }, 31.45);
+      blurIn("#fx-blocked", 31.8, 0.45);
+      blurOut("#fx-out", 33.68, 0.3);
+
+      /* ---- the one idea 34-40 ---- */
+      tl.fromTo(["#ln-1a", "#ln-1b", "#ln-1c"], { opacity: 0, filter: "blur(6px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.25, ease: IN, stagger: 0.12 }, 34.2);
+      tl.fromTo("#ln-struct", { opacity: 0, color: () => cv("line", "#2A3542") }, { opacity: 1, color: () => cv("muted", "#8A96A3"), duration: 0.6, ease: IN }, 35.0);
+      tl.fromTo("#ln-2", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: IN }, 36.6);
+      tl.to("#ln-out", { x: -120, opacity: 0, filter: "blur(10px)", duration: 0.3, ease: OUT }, 39.68);
+
+      window.__timelines["problem"] = tl;
+    })();
+  </script>
+</template>

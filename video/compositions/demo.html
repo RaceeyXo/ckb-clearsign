@@ -1,0 +1,120 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Inter", sans-serif;
+      color: var(--ink, #fff);
+    }
+    #d-grid {
+      position: absolute;
+      inset: 0;
+      background-color: var(--bg, #0b0f14);
+      background-image:
+        linear-gradient(var(--grid, #131a22) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid, #131a22) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-position: -1px -1px;
+    }
+    #d-heading { position: absolute; left: 96px; top: 74px; font-size: 52px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+    #d-window {
+      position: absolute; left: 96px; top: 170px; width: 1280px; height: 766px;
+      border: 3px solid #3a4553; border-radius: 16px; background: #05080b; overflow: hidden;
+    }
+    #d-bar { position: absolute; left: 0; top: 0; width: 100%; height: 46px; background: #141b23; border-bottom: 1px solid #2a3542; }
+    #d-bar .dot { position: absolute; top: 15px; width: 16px; height: 16px; border-radius: 50%; }
+    #d-title { position: absolute; left: 0; right: 0; top: 5px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 28px; color: var(--muted, #8a96a3); }
+    #d-screen { position: absolute; left: 0; top: 46px; width: 1274px; height: 714px; }
+    #d-placeholder { position: absolute; inset: 0; }
+    #d-prompt { position: absolute; left: 40px; top: 36px; font-family: "JetBrains Mono", monospace; font-size: 30px; white-space: nowrap; }
+    #d-prompt .p { color: var(--accent, #3cc68a); }
+    #d-cursor { display: inline-block; width: 16px; height: 32px; margin-left: 8px; vertical-align: -6px; background: var(--ink, #fff); }
+    #d-ph-card {
+      position: absolute; left: 337px; top: 257px; width: 600px; height: 200px;
+      border: 2px dashed #3a4553; border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    }
+    #d-ph-text { font-size: 36px; font-weight: 700; }
+    #d-ph-path { font-family: "JetBrains Mono", monospace; font-size: 28px; color: var(--muted, #8a96a3); }
+    #d-prog-bg { position: absolute; left: 40px; bottom: 36px; width: 1194px; height: 6px; border-radius: 3px; background: #1c2530; }
+    #d-prog { position: absolute; left: 40px; bottom: 36px; width: 1194px; height: 6px; border-radius: 3px; background: #3a4553; transform-origin: 0 50%; }
+    #d-clip-box { position: absolute; inset: 0; }
+
+    #root .callout {
+      position: absolute; left: 1440px; width: 384px; padding: 26px 26px 26px 30px;
+      border: 2px solid #2a3542; border-left: 6px solid var(--accent, #3cc68a); border-radius: 12px; background: #0f151c;
+      font-size: 36px; font-weight: 700; line-height: 1.25;
+    }
+    #d-c1-t { top: 300px; }
+    #d-c2-t { top: 490px; border-left-color: var(--danger, #ff4d4f); }
+    #d-c3-t { top: 680px; border-left-color: var(--ink, #fff); }
+  </style>
+
+  <div id="root" data-composition-id="demo" data-width="1920" data-height="1080">
+    <div id="d-grid"></div>
+    <div id="d-all" style="position: absolute; inset: 0">
+    <div id="d-heading" data-var-text="demoHeading">The real run</div>
+
+    <div id="d-window">
+      <div id="d-bar">
+        <div class="dot" style="left: 18px; background: #ff5f57"></div>
+        <div class="dot" style="left: 44px; background: #febc2e"></div>
+        <div class="dot" style="left: 70px; background: #28c840"></div>
+        <div id="d-title" data-var-text="demoWindowTitle">npm run demo</div>
+      </div>
+      <div id="d-screen">
+        <!-- DEMO-CLIP: placeholder below is replaced by assets/demo.mp4 (node scripts/set-demo.mjs) -->
+        <div id="d-placeholder" class="clip" data-start="0" data-duration="60" data-track-index="0">
+          <div id="d-prompt"><span class="p">$</span> npm run demo<span id="d-cursor"></span></div>
+          <div id="d-ph-card">
+            <div id="d-ph-text" data-var-text="demoPlaceholder">terminal recording goes here</div>
+            <div id="d-ph-path">assets/demo.mp4</div>
+          </div>
+          <div id="d-prog-bg"></div>
+          <div id="d-prog"></div>
+        </div>
+        <!-- /DEMO-CLIP -->
+      </div>
+    </div>
+
+    <!-- Callouts: retime each data-start to match your recording (scene seconds). -->
+    <div id="d-c1" class="clip" data-start="6" data-duration="54" data-track-index="1"><div id="d-c1-t" class="callout" data-var-text="callout1">Honest RPC → verified ✅</div></div>
+    <div id="d-c2" class="clip" data-start="24" data-duration="36" data-track-index="2"><div id="d-c2-t" class="callout" data-var-text="callout2">Lying RPC → caught 🛑</div></div>
+    <div id="d-c3" class="clip" data-start="42" data-duration="18" data-track-index="3"><div id="d-c3-t" class="callout" data-var-text="callout3">User never asked to sign</div></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = "expo.out";
+      const host = (id) => parseFloat(document.querySelector(id).getAttribute("data-start"));
+
+      tl.fromTo("#d-heading", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: IN }, 0);
+      tl.fromTo("#d-window", { opacity: 0.2, scale: 0.97, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.6, ease: IN }, 0);
+
+      const ph = document.querySelector("#d-placeholder");
+      if (ph) {
+        const len = parseFloat(ph.getAttribute("data-duration"));
+        tl.fromTo("#d-prog", { scaleX: 0 }, { scaleX: 1, duration: len, ease: "none" }, 0);
+        tl.fromTo("#d-ph-card", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: IN }, 0.6);
+      }
+
+      // each callout slides in from the right edge; the one before it steps back
+      const ids = ["#d-c1", "#d-c2", "#d-c3"];
+      ids.forEach((id, i) => {
+        const at = host(id);
+        tl.fromTo(id + "-t", { opacity: 0, x: 40, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.6, ease: IN }, at);
+        if (i > 0) tl.to(ids[i - 1] + "-t", { opacity: 0.45, duration: 0.4, ease: "power2.out" }, at);
+      });
+
+      // leave with the scene: the length comes from the clip (or the placeholder)
+      const body = document.querySelector("#d-clip") || ph;
+      const end = parseFloat(body.getAttribute("data-duration"));
+      tl.fromTo("#d-all", { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(8px)", duration: 0.28, ease: "power3.in", immediateRender: false }, end - 0.3);
+
+      window.__timelines["demo"] = tl;
+    })();
+  </script>
+</template>
